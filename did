@@ -1,0 +1,59 @@
+#!/bin/bash
+
+function __create() {
+	docker run -it --cpus 1 --name $1 -v ~/.did/$1/root:/root -v "$PWD":/data -w /data -d --privileged docker:dind
+	echo "Docker in docker machine is started :)"
+	docker exec -it $1 sh;
+};
+
+function __del() {
+	docker rm -f $1;
+	rm -rf ~/.did/$1
+}
+
+function __snapshot() {
+	docker exec -it $1 cp -r /var/lib/docker/ /root/docker/;
+}
+
+function __shell() 	{
+	docker exec -it $1 sh;
+}
+
+function __help() {
+	echo "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ "
+	echo "  ___  _ ___  "
+	echo " |   \(_)   \ "
+	echo " | |) | | |) |		Docker in Docker CLI Versio 0.0.1-alpha"
+	echo " |___/|_|___/ 		M.Mahrous <m.mahrous.94@gmail.com> "
+	echo "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ "
+	echo "              			"
+	echo "Please use either:"
+	echo "		did create {name}"
+	echo "		did ssh {name}"
+	echo "		did snapshot {name}"
+	echo "		did del {name}"
+}
+
+
+function __main() {
+	if [ "$1" == "ssh" ]
+	then
+		__shell $2
+	elif [ "$1" == "snapshot" ]
+	then
+		__snapshot $2
+	elif [ "$1" == "create" ]
+	then
+		__create $2
+	elif [ "$1" == "del" ]
+	then
+		__del $2
+	elif [ "$1" == "help" ]
+	then
+		__help
+	else
+		__help
+	fi
+}
+
+__main $@
