@@ -4,7 +4,7 @@ This command line tool will help you to create docker in docker container based 
 
 ## Install
 ```
-curl https://transfer.sh/11w5o1/did_0_0_1_alpha.sh -o /usr/local/bin/did && chmod +x /usr/local/bin/did
+curl https://raw.githubusercontent.com/mmahrous/did/master/did -o /usr/local/bin/did && chmod +x /usr/local/bin/did
 ```
 tested on MacOS 10.12.6 and Ubuntu 16.04
 
